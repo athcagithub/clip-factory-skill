@@ -27,7 +27,7 @@ Inside Hermes:
 
 ## What it wraps
 
-The skill describes the public `/api/v1/*` surface at `https://api.clip-factory.app/v1`. Hermes calls it directly using its built-in terminal/HTTP tools — no separate runtime, no MCP server, no glue code.
+The skill describes the public `/v1/*` surface at `https://api.clip-factory.app/v1`. Hermes calls it directly using its built-in terminal/HTTP tools — no separate runtime, no MCP server, no glue code.
 
 Auth is a bearer token (`Authorization: Bearer cf_live_...`). Each key is tied to a single clip-factory user and is gated on an active subscription; revoking a key or letting your subscription lapse cuts the agent off within seconds.
 
