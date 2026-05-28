@@ -4,10 +4,15 @@ description: Scrape YouTube channels into short clips, stitch with a CTA, and sc
 version: 1.0.0
 author: clip-factory
 license: MIT
+platforms: [linux, macos]
 required_environment_variables:
   - name: CLIPFACTORY_KEY
     prompt: "Enter your clip-factory API key"
     help: "Generate one at https://clip-factory.app → Settings → Hermes Agent API key"
+metadata:
+  hermes:
+    tags: [video, youtube, tiktok, social-media, scheduling, clip-factory]
+    related_skills: [postiz, youtube-content]
 ---
 
 ## When to use
