@@ -5,7 +5,7 @@ Lets [Hermes Agent](https://hermes-agent.nousresearch.com) drive your [clip-fact
 ## Install
 
 ```bash
-hermes skills tap add clipfactoryapp/clipfactory-skill
+hermes skills tap add athcagithub/clip-factory-skill
 ```
 
 Hermes will prompt you for `CLIPFACTORY_KEY` during install. Generate one at [clip-factory.app → Settings → Hermes Agent API key](https://clip-factory.app).
