@@ -43,6 +43,7 @@ GET  /clips     ?project_id=...&ids=a,b,c&status=...      → { clips: [{ id, st
 POST /stitch    { project_id, clip_ids }                  → 202 { stitched: [{ clip_id, status }], skipped }
 POST /schedule  { project_id, clip_id, scheduled_for, caption?, account_ids? }
                                                           → { ok, clip_id, provider, scheduled_for, ... }
+GET  /analytics ?project_id=...&since=7d                  → { project_id, period, oldest_sync_at, aggregate, posts }
 ```
 
 Constraints:
@@ -70,6 +71,17 @@ Clip statuses (from `GET /clips`): `downloading` → `ready` → `stitching` →
 - `GET /clips?project_id=...&status=scheduled` — what's currently in the schedule queue.
 - `GET /clips?project_id=...&status=posted` — what's already out.
 
+## Procedure: report performance / how clips are doing
+
+When the user asks something like *"how are my clips doing?"*, *"performance update"*, *"top performers this week"*:
+
+1. **`GET /analytics?project_id=...&since=7d`** (or `30d`, `90d`, or omit for all-time).
+   `since` accepts shorthand (`7d`, `12h`, `2w`) or an ISO 8601 datetime.
+2. Read `aggregate` for the headline: total views/likes/comments across all posts in the window.
+3. Read `oldest_sync_at` and compare to now. If the oldest cached sync is more than **24 hours old**, prefix the report with a freshness note like *"data last synced X ago — open the clip-factory dashboard and hit Sync if you want fresh numbers."*
+4. From `posts[]`, pick top performers by `totals.views` for a per-clip leaderboard. Each post has `per_account` showing the same clip's numbers per platform (TikTok / Instagram / YouTube / etc.) — surface the platform mix when relevant.
+5. Reply with a tight summary: total views, top 3 clips by views, any clips with anomalous engagement (e.g. comment counts way above their views suggesting controversy / viral hits).
+
 ## Pitfalls
 
 - **`subscription_inactive` (402):** Stop immediately. Tell the user their clip-factory subscription isn't active and to reactivate at https://clip-factory.app/billing. Don't retry.
@@ -84,6 +96,7 @@ Clip statuses (from `GET /clips`): `downloading` → `ready` → `stitching` →
 - **`rate_limited` (429):** Back off for `retry_after_seconds` then continue. This is purely defensive against runaway loops; in normal use you should never hit this.
 - **Postiz scheduling** uses all of the user's connected social accounts automatically. **Post-Bridge** requires explicit `account_ids`: call `GET /accounts` first; if `provider: "postbridge"`, use every returned account id by default (unless the user specified which ones they want).
 - **Never** call `/scrape` with `max > 100`. It will be capped server-side but you'll waste tokens generating the request.
+- **Analytics is read-only and possibly stale.** `GET /analytics` returns whatever the dashboard last synced from Postiz/Post-Bridge. There is no agent-callable sync endpoint — refreshing happens when the user clicks Sync in the dashboard. Always check `oldest_sync_at` and warn the user if it's >24h old.
 
 ## Verification
 
