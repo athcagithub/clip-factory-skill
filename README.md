@@ -8,10 +8,9 @@ Lets [Hermes Agent](https://hermes-agent.nousresearch.com) drive your [clip-fact
 mkdir -p ~/.hermes/skills/clipfactory
 curl -fsSL https://raw.githubusercontent.com/athcagithub/clip-factory-skill/main/skills/social/clipfactory/SKILL.md \
   -o ~/.hermes/skills/clipfactory/SKILL.md
-hermes config set CLIPFACTORY_KEY cf_live_...
 ```
 
-Generate the key at [clip-factory.app → Settings → Hermes Agent API key](https://clip-factory.app).
+Hermes will prompt you for `CLIPFACTORY_KEY` the first time you use the skill. Generate the key at [clip-factory.app → Settings → Hermes Agent API key](https://clip-factory.app).
 
 (The skill is structured for Hermes' tap-based discovery — `hermes skills tap add athcagithub/clip-factory-skill` may also work in future Hermes versions, but the direct curl install is the reliable path today.)
 
