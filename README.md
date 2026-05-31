@@ -4,16 +4,16 @@ Lets your AI agent — [Claude Code](https://claude.com/claude-code), [Hermes Ag
 
 ## Install
 
-```bash
-npx skills add athcagithub/clip-factory-skill
-```
-
-This uses the [`skills`](https://github.com/vercel-labs/skills) CLI, which auto-detects your installed agents. To target one explicitly and skip prompts:
+Use the [`skills`](https://github.com/vercel-labs/skills) CLI and **name your agent explicitly** — this is the reliable path:
 
 ```bash
 npx skills add athcagithub/clip-factory-skill -a claude-code -y    # Claude Code  → ~/.claude/skills/
 npx skills add athcagithub/clip-factory-skill -a hermes-agent -y   # Hermes Agent → ~/.hermes/skills/
 ```
+
+> **Don't use the bare `npx skills add athcagithub/clip-factory-skill` for Claude Code.** Without `-a`, the CLI installs to the universal `~/.agents/skills/` directory — which **Claude Code does not read** — so the skill silently won't show up. Always pass `-a claude-code`. (In the interactive picker, the "Universal — always included" line does *not* cover Claude Code; you must tick Claude Code itself.)
+
+Claude Code picks up the new skill within the session, or on next launch if it doesn't appear right away.
 
 **Save your API key once.** Generate one at [clip-factory.app → Settings → Agent API key](https://clip-factory.app), then store it on your computer so no agent ever has to ask for it:
 
