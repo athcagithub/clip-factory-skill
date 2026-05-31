@@ -27,20 +27,28 @@ If the user mentions clip-factory by name, or short-form / TikTok / YouTube Shor
 
 ## Getting the API key
 
-Every call needs `Authorization: Bearer $CLIPFACTORY_KEY`. Before making the first request, make sure the key is available:
+Every call needs `Authorization: Bearer $CLIPFACTORY_KEY`. The key lives on the **user's computer** — resolve it once, save it, and never ask again.
+
+**Before the first request, resolve the key in this order:** the environment, then the saved file on disk.
 
 ```bash
-echo "${CLIPFACTORY_KEY:+set}"   # prints "set" if the key is already in the environment
+KEY="${CLIPFACTORY_KEY:-$(cat ~/.clip-factory/key 2>/dev/null)}"
+echo "${KEY:+found}"   # prints "found" if a key is already available
 ```
 
-- **If it prints `set`** (e.g. Hermes provisioned it, or the user exported it earlier), use `$CLIPFACTORY_KEY` directly — don't ask again.
-- **If it's empty**, ask the user: *"Paste your clip-factory API key — generate one at https://clip-factory.app → Settings → Agent API key."* Then export it for the rest of the session before any API call:
+- **If it prints `found`** (Hermes provisioned `$CLIPFACTORY_KEY`, or the user saved it on a previous run), use it — do **not** ask. Make it available for this session: `export CLIPFACTORY_KEY="$KEY"`.
+- **If it's empty**, ask the user once: *"Paste your clip-factory API key — generate one at https://clip-factory.app → Settings → Agent API key."* Then save it to their machine so no agent ever has to ask again:
 
   ```bash
-  export CLIPFACTORY_KEY='cf_live_...'   # the value the user pasted
+  mkdir -p ~/.clip-factory
+  printf '%s' 'cf_live_...' > ~/.clip-factory/key   # the value the user pasted
+  chmod 600 ~/.clip-factory/key
+  export CLIPFACTORY_KEY="$(cat ~/.clip-factory/key)"
   ```
 
-The key is per-user and gated on an active subscription. Never hard-code it into a file or commit it; keep it in the environment for the session only.
+  Then confirm: *"Saved to ~/.clip-factory/key — I won't ask again on this computer."*
+
+The key is per-user and gated on an active subscription. `~/.clip-factory/key` is owner-only (chmod 600); never echo it back, copy it elsewhere, or commit it.
 
 ## Quick reference
 

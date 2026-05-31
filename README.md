@@ -15,9 +15,13 @@ npx skills add athcagithub/clip-factory-skill -a claude-code -y    # Claude Code
 npx skills add athcagithub/clip-factory-skill -a hermes-agent -y   # Hermes Agent → ~/.hermes/skills/
 ```
 
-**API key.** Generate one at [clip-factory.app → Settings → Agent API key](https://clip-factory.app).
-- **Hermes** prompts you for `CLIPFACTORY_KEY` automatically the first time you use the skill.
-- **Claude Code** (and other agents without a secret prompt): the skill asks you to paste the key in chat and exports it for the session. To skip that each time, export it yourself first: `export CLIPFACTORY_KEY=cf_live_...` (add to `~/.zshrc` to persist).
+**Save your API key once.** Generate one at [clip-factory.app → Settings → Agent API key](https://clip-factory.app), then store it on your computer so no agent ever has to ask for it:
+
+```bash
+read -rsp 'clip-factory API key: ' k && mkdir -p ~/.clip-factory && printf '%s' "$k" > ~/.clip-factory/key && chmod 600 ~/.clip-factory/key && echo ' ✓ saved'
+```
+
+That's it — the skill reads the key from `~/.clip-factory/key` (or a `CLIPFACTORY_KEY` env var) on every run. If you skip this step, the skill simply asks for the key the first time you use it and saves it to the same place for you. The key stays on your machine — it's never committed or sent anywhere except the clip-factory API.
 
 <details>
 <summary>Manual install (no <code>npx</code>)</summary>
