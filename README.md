@@ -23,7 +23,7 @@ Hermes will prompt you for `CLIPFACTORY_KEY` the first time you use the skill. G
 
 ```bash
 mkdir -p ~/.hermes/skills/clipfactory
-curl -fsSL https://raw.githubusercontent.com/athcagithub/clip-factory-skill/main/skills/social/clipfactory/SKILL.md \
+curl -fsSL https://raw.githubusercontent.com/athcagithub/clip-factory-skill/main/SKILL.md \
   -o ~/.hermes/skills/clipfactory/SKILL.md
 ```
 
