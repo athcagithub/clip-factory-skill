@@ -8,7 +8,7 @@ platforms: [linux, macos]
 required_environment_variables:
   - name: CLIPFACTORY_KEY
     prompt: "Enter your clip-factory API key"
-    help: "Generate one at https://clip-factory.app → Settings → Hermes Agent API key"
+    help: "Generate one at https://clip-factory.app → Settings → Agent API key"
 metadata:
   hermes:
     tags: [video, youtube, tiktok, social-media, scheduling, clip-factory]
@@ -24,6 +24,23 @@ The user wants to make, schedule, or batch-manage short-form clips from YouTube 
 - "How many credits do I have left?"
 
 If the user mentions clip-factory by name, or short-form / TikTok / YouTube Shorts batching with scheduling, this skill applies.
+
+## Getting the API key
+
+Every call needs `Authorization: Bearer $CLIPFACTORY_KEY`. Before making the first request, make sure the key is available:
+
+```bash
+echo "${CLIPFACTORY_KEY:+set}"   # prints "set" if the key is already in the environment
+```
+
+- **If it prints `set`** (e.g. Hermes provisioned it, or the user exported it earlier), use `$CLIPFACTORY_KEY` directly — don't ask again.
+- **If it's empty**, ask the user: *"Paste your clip-factory API key — generate one at https://clip-factory.app → Settings → Agent API key."* Then export it for the rest of the session before any API call:
+
+  ```bash
+  export CLIPFACTORY_KEY='cf_live_...'   # the value the user pasted
+  ```
+
+The key is per-user and gated on an active subscription. Never hard-code it into a file or commit it; keep it in the environment for the session only.
 
 ## Quick reference
 

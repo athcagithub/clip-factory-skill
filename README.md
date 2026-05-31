@@ -1,6 +1,6 @@
-# clip-factory skill for Hermes Agent
+# clip-factory skill
 
-Lets [Hermes Agent](https://hermes-agent.nousresearch.com) drive your [clip-factory](https://clip-factory.app) account on your behalf — scrape YouTube channels, stitch clips with your CTA, and schedule them out to social.
+Lets your AI agent — [Claude Code](https://claude.com/claude-code), [Hermes Agent](https://hermes-agent.nousresearch.com), or any of the [50+ agents the `skills` CLI supports](https://github.com/vercel-labs/skills) — drive your [clip-factory](https://clip-factory.app) account on your behalf: scrape YouTube channels, stitch clips with your CTA, and schedule them out to social.
 
 ## Install
 
@@ -8,15 +8,16 @@ Lets [Hermes Agent](https://hermes-agent.nousresearch.com) drive your [clip-fact
 npx skills add athcagithub/clip-factory-skill
 ```
 
-This uses the [`skills`](https://github.com/vercel-labs/skills) CLI, which auto-detects your installed agents. To target Hermes explicitly and skip prompts:
+This uses the [`skills`](https://github.com/vercel-labs/skills) CLI, which auto-detects your installed agents. To target one explicitly and skip prompts:
 
 ```bash
-npx skills add athcagithub/clip-factory-skill -a hermes-agent -y
+npx skills add athcagithub/clip-factory-skill -a claude-code -y    # Claude Code  → ~/.claude/skills/
+npx skills add athcagithub/clip-factory-skill -a hermes-agent -y   # Hermes Agent → ~/.hermes/skills/
 ```
 
-Either way the skill lands at `~/.hermes/skills/clipfactory/`.
-
-Hermes will prompt you for `CLIPFACTORY_KEY` the first time you use the skill. Generate the key at [clip-factory.app → Settings → Hermes Agent API key](https://clip-factory.app).
+**API key.** Generate one at [clip-factory.app → Settings → Agent API key](https://clip-factory.app).
+- **Hermes** prompts you for `CLIPFACTORY_KEY` automatically the first time you use the skill.
+- **Claude Code** (and other agents without a secret prompt): the skill asks you to paste the key in chat and exports it for the session. To skip that each time, export it yourself first: `export CLIPFACTORY_KEY=cf_live_...` (add to `~/.zshrc` to persist).
 
 <details>
 <summary>Manual install (no <code>npx</code>)</summary>
@@ -31,17 +32,17 @@ curl -fsSL https://raw.githubusercontent.com/athcagithub/clip-factory-skill/main
 
 ## Use
 
-Inside Hermes:
+Just talk to your agent:
 
 > *"Make 50 vids of @mrbeast and schedule one every 6 hours starting Monday."*
 
 > *"What's my clip-factory quota?"*
 
-> *"Scrape @whoever every Monday at 9am and queue them out."* (use Hermes' built-in cron for recurring tasks.)
+> *"Scrape @whoever every Monday at 9am and queue them out."* (use your agent's scheduler — e.g. Hermes' built-in cron, or `/loop` / scheduled runs in Claude Code — for recurring tasks.)
 
 ## What it wraps
 
-The skill describes the public `/v1/*` surface at `https://api.clip-factory.app/v1`. Hermes calls it directly using its built-in terminal/HTTP tools — no separate runtime, no MCP server, no glue code.
+The skill describes the public `/v1/*` surface at `https://api.clip-factory.app/v1`. The agent calls it directly using its built-in terminal/HTTP tools — no separate runtime, no MCP server, no glue code.
 
 Auth is a bearer token (`Authorization: Bearer cf_live_...`). Each key is tied to a single clip-factory user and is gated on an active subscription; revoking a key or letting your subscription lapse cuts the agent off within seconds.
 
